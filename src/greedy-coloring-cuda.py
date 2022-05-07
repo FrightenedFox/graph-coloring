@@ -110,16 +110,13 @@ A = np.array([
     [1, 1, 0, 1, 0],
 ], dtype=np.int8)
 N_VERTICES = A.shape[0]
-N_EDGES = np.sum(A)
 
-C = np.array([1, 2, 3, 1, 3], dtype=np.uint16)
 order0 = np.array([3, 1, 4, 0, 2], dtype=np.uint32)
 order1 = np.arange(5, dtype=np.uint32)
 order2 = np.arange(5, dtype=np.uint32)
 np.random.shuffle(order2)
-print(order2)
 orders = np.stack((order0, order1, order2))
-coloring = np.zeros(A.shape[0], dtype=np.uint16)
+
 colorings = np.zeros_like(orders)
 
 threads_per_block = 1
