@@ -1,5 +1,4 @@
 import numpy as np
-from numba import jit
 
 
 def generate_random_orderings(n_elements: int, k_orderings: int, rng: np.random.Generator) -> np.ndarray:
@@ -23,16 +22,33 @@ def generate_random_orderings(n_elements: int, k_orderings: int, rng: np.random.
 
 
 def mutate_orderings(orderings: np.ndarray, probability: float, rng: np.random.Generator, inplace=True) -> np.ndarray:
+    """Create a mutations in orderings. Works slowly, not recommended to use.
+
+    Parameters
+    ----------
+    orderings :
+        Original orderings to be mutated.
+    probability :
+        Probability of the mutation.
+    rng :
+        numpy.random.Generator. Can be obtained using `numpy.random.default_rng()` function.
+    inplace :
+        Whether to modify orderings inplace or create a copy of an array.
+
+    Returns
+    -------
+        Mutated orderings.
+    """
     if not inplace:
         orderings = np.array(orderings)
     k_orderings, n_elements = orderings.shape
-    m_mutations = np.ceil(orderings.size * probability / 2).astype(int)     # because swaps double n of mutations
+    m_mutations = np.ceil(orderings.size * probability / 2).astype(int)  # because swaps double n of mutations
     rows = np.sort(rng.integers(k_orderings, size=m_mutations))
     origins, destinations = np.zeros(m_mutations, dtype=int), np.zeros(m_mutations, dtype=int)
     pos_id = 0
     for row in np.unique(rows):
         half_elements = np.ceil(n_elements / 2).astype(int)
-        n_swaps = np.min([np.sum(rows == row), half_elements])   # min to eliminate occasions when n_swaps > n_elements
+        n_swaps = np.min([np.sum(rows == row), half_elements])  # min to eliminate occasions when n_swaps > n_elements
         addresses = rng.choice(n_elements, size=n_swaps * 2, replace=False)
         origins[pos_id:(pos_id + n_swaps)] = addresses[:n_swaps]
         destinations[pos_id:(pos_id + n_swaps)] = addresses[n_swaps:]
