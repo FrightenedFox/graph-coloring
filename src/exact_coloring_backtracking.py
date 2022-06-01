@@ -39,27 +39,3 @@ def coloring(graph: np.ndarray,
             coloring(graph, current_coloring.copy(), vertex, color, n_colors, colorings_out)
     else:
         colorings_out.append(current_coloring)
-
-
-A = np.array([
-    [0, 1, 0, 0, 1],
-    [1, 0, 1, 1, 1],
-    [0, 1, 0, 1, 0],
-    [0, 1, 1, 0, 1],
-    [1, 1, 0, 1, 0],
-], dtype=np.int8)
-# colorings = np.zeros((10, 5), dtype=np.uint16)
-colorings = List()
-colorings.append(np.zeros(5, dtype=np.uint16))
-colorings.pop()
-coloring(
-    graph=A,
-    current_coloring=np.zeros(5, dtype=np.uint16),
-    vertex=0,
-    vertex_color=1,
-    n_colors=3,
-    colorings_out=colorings
-)
-
-print(np.stack(colorings))
-

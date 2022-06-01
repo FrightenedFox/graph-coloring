@@ -1,6 +1,8 @@
 import numpy as np
 from numba import cuda
 
+N_VERTICES = 6
+
 
 @cuda.jit(device=True, nopython=True)
 def to_zeros(array: np.ndarray):
@@ -100,27 +102,3 @@ def color_graphs(graph: np.ndarray,
 
     for i in range(start, coloring_orders.shape[0], stride):
         color_with_single_ordering(graph, coloring_orders[i], colorings_out[i])
-
-
-A = np.array([
-    [0, 1, 0, 0, 1],
-    [1, 0, 1, 1, 1],
-    [0, 1, 0, 1, 0],
-    [0, 1, 1, 0, 1],
-    [1, 1, 0, 1, 0],
-], dtype=np.int8)
-N_VERTICES = A.shape[0]
-
-order0 = np.array([3, 1, 4, 0, 2], dtype=np.uint32)
-order1 = np.arange(5, dtype=np.uint32)
-order2 = np.arange(5, dtype=np.uint32)
-np.random.shuffle(order2)
-orders = np.stack((order0, order1, order2))
-
-colorings = np.zeros_like(orders)
-
-threads_per_block = 1
-blocks_per_grid = 30
-
-color_graphs[blocks_per_grid, threads_per_block](A, orders, colorings)
-print(colorings)

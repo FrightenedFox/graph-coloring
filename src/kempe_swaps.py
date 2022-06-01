@@ -4,7 +4,7 @@ import numpy as np
 from numba import njit
 
 
-def find_kempe_chain(graph: np.ndarray, coloring: np.ndarray) -> Tuple[List[List[int]], List[np.ndarray]]:
+def find_kempe_chains(graph: np.ndarray, coloring: np.ndarray) -> Tuple[List[List[int]], np.ndarray]:
     """Find all unique Kempe chains.
 
     Parameters
