@@ -1,10 +1,10 @@
+import matplotlib.pyplot as plt
+import networkx as nx
 import numpy as np
 import pandas as pd
-import networkx as nx
-import matplotlib.pyplot as plt
 
 plt.rcParams['figure.figsize'] = [16, 9]
-plt.rcParams['figure.dpi'] =  200
+plt.rcParams['figure.dpi'] = 200
 plt.style.use('default')
 
 
@@ -20,6 +20,7 @@ def create_graph(path: str):
     graph = nx.from_numpy_array(preferences_matrix)
     return strict_graph, positive_graph, negative_graph, graph
 
+
 def draw_strict_graph(graph: nx.Graph, labels: pd.Series = None):
     nx.draw(graph,
             with_labels=True,
@@ -27,6 +28,8 @@ def draw_strict_graph(graph: nx.Graph, labels: pd.Series = None):
             font_color="black",
             labels=labels
             )
+    plt.show()
+
 
 def get_graph_edge_labels(graph: nx.Graph):
     edge_labels = {(edge[0], edge[1]): edge[-1]["weight"]
@@ -37,6 +40,7 @@ def get_graph_edge_labels(graph: nx.Graph):
     positive_edge_labels = pd.Series(edge_labels).iloc[np.where(pd.Series(edge_labels) > 0)].to_dict()
     return edge_labels, negative_edges, positive_edges, negative_edge_labels, positive_edge_labels
 
+
 def draw_graph(graph: nx.Graph,
                labels: pd.Series = None,
                color_friends: str = "green",
@@ -44,7 +48,8 @@ def draw_graph(graph: nx.Graph,
                coloring: np.ndarray = None):
     pos = nx.circular_layout(graph, scale=10)
     options = {"edgecolors": "gray", "node_size": 800, "alpha": 0.9}
-    edge_labels, negative_edges, positive_edges, negative_edge_labels, positive_edge_labels = get_graph_edge_labels(graph)
+    edge_labels, negative_edges, positive_edges, negative_edge_labels, positive_edge_labels = get_graph_edge_labels(
+        graph)
     if coloring is not None:
         node_color = [plt.cm.tab10(color) for color in coloring]
     else:
@@ -56,9 +61,11 @@ def draw_graph(graph: nx.Graph,
     nx.draw_networkx_edge_labels(graph, pos, edge_labels=positive_edge_labels, font_color=color_enemies, font_size=18)
     nx.draw_networkx_edge_labels(graph, pos, edge_labels=negative_edge_labels, font_color=color_friends, font_size=18)
     nx.draw_networkx_labels(graph, pos, labels, font_size=22, font_color="white")
+    plt.show()
 
 
-Gs, Gp, Gn, G = create_graph("Friends.csv")
-draw_strict_graph(Gs)
+if __name__ == '__main__':
+    Gs, Gp, Gn, G = create_graph("../Friends.csv")
+    draw_strict_graph(Gs)
 
-draw_graph(G, coloring=np.array([2, 1, 1, 2, 2, 1]))
+    draw_graph(G, coloring=np.array([2, 1, 1, 2, 2, 1]))
