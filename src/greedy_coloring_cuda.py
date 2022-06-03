@@ -1,7 +1,7 @@
 import numpy as np
 from numba import cuda
 
-N_VERTICES = 6
+N_VERTICES = 15
 
 
 @cuda.jit(device=True, nopython=True)

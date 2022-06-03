@@ -58,8 +58,8 @@ def draw_graph(graph: nx.Graph,
     nx.draw_networkx_edges(graph, pos, width=1, alpha=0.5)
     nx.draw_networkx_edges(graph, pos, edgelist=positive_edges, width=8, alpha=0.5, edge_color=color_enemies)
     nx.draw_networkx_edges(graph, pos, edgelist=negative_edges, width=8, alpha=0.5, edge_color=color_friends)
-    nx.draw_networkx_edge_labels(graph, pos, edge_labels=positive_edge_labels, font_color=color_enemies, font_size=18)
-    nx.draw_networkx_edge_labels(graph, pos, edge_labels=negative_edge_labels, font_color=color_friends, font_size=18)
+    nx.draw_networkx_edge_labels(graph, pos, edge_labels=positive_edge_labels, font_color=color_enemies, font_size=10)
+    nx.draw_networkx_edge_labels(graph, pos, edge_labels=negative_edge_labels, font_color=color_friends, font_size=10)
     nx.draw_networkx_labels(graph, pos, labels, font_size=22, font_color="white")
     plt.show()
 

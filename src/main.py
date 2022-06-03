@@ -37,7 +37,11 @@ def cost_func_2(group_sizes: np.ndarray,
 
 def print_colorings(colorings: np.ndarray, labels: Union[List[str], None] = None):
     """Function to print colorings"""
+    if len(colorings) > 10:
+        colorings = colorings[:10]
+        print("Printing first 10 colorings:")
     if labels:
+        labels = labels[:len(colorings)]
         for label, coloring in zip(labels, colorings):
             print(f"{label}:\t{coloring}")
     else:
@@ -46,10 +50,12 @@ def print_colorings(colorings: np.ndarray, labels: Union[List[str], None] = None
     print()
 
 
-def print_kempe_chains(kempe_chains: np.ndarray):
+def print_kempe_chains(kempe_chains: dict):
     """Function to print colorings"""
     for i, chain in kempe_chains.items():
         print(f"{i}:\t{chain}")
+        if i >= 10:
+            break
     print()
 
 
@@ -111,12 +117,12 @@ def backtracking_algorithm(strict_graph: np.ndarray, n_colors: int):
     return np.stack(colorings)
 
 
-def main(graph_path: str):
+def main(graph_path: str, group_sizes_path: str, n_random: int = 10, k_tables: int = 2):
     title_half_width = 45
     print(f"\nLoading graph from {graph_path}.\n")
-    preferences_graph = pd.read_csv(graph_path, index_col=False, names=np.arange(6)).values
+    preferences_graph = pd.read_csv(graph_path, index_col=False, header=None).values
     strict_graph = (preferences_graph == 1).astype(int)
-    group_sizes = np.array([4, 1, 2, 1, 1, 3])  # s_v
+    group_sizes = pd.read_csv(group_sizes_path, index_col=False, header=None).values.flatten()  # s_v
 
     print(f"\n\n{'=' * title_half_width} Naive algorithms {'=' * title_half_width}\n")
 
@@ -130,7 +136,7 @@ def main(graph_path: str):
 
     print(f"\n\n{'=' * title_half_width} Random orderings {'=' * title_half_width}\n")
 
-    colorings = random_orderings(strict_graph, 10)
+    colorings = random_orderings(strict_graph, n_random)
     print(f"Stage I. Find colorings:")
     print_colorings(colorings)
 
@@ -139,7 +145,7 @@ def main(graph_path: str):
 
     print(f"\n\n{'=' * (title_half_width - 2)} Backtracking {'=' * (title_half_width - 2)}\n")
 
-    colorings = backtracking_algorithm(strict_graph, 2)
+    colorings = backtracking_algorithm(strict_graph, k_tables)
     print(f"Stage I. Find colorings:")
     print_colorings(colorings)
 
@@ -199,4 +205,6 @@ def second_stage(colorings: np.ndarray,
 
 
 if __name__ == '__main__':
-    main("../Friends.csv")
+    main("../Wedding-seating-plan.csv",
+         "../Wedding-seating-plan-Group-sizes.csv",
+         k_tables=3)
