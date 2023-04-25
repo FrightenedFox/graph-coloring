@@ -5,10 +5,10 @@ import pandas as pd
 from numba import cuda, njit
 from numba.typed import List as NumbaList
 
-import exact_coloring_backtracking as ecb
-import genetic_shuffling as gs
-import greedy_coloring_cuda as gcc
-import kempe_swaps as ks
+import wedding_seating.exact_coloring_backtracking as ecb
+import wedding_seating.genetic_shuffling as gs
+import wedding_seating.greedy_coloring_cuda as gcc
+import wedding_seating.kempe_swaps as ks
 
 
 @njit
